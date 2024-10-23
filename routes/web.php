@@ -34,8 +34,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/events_create', [EventController::class, 'create'])->name('event.create');
+    Route::get('/events_list', [EventController::class, 'list'])->name('event.list');
     Route::get('/events', [EventController::class, 'index'])->name('event.index');
-    Route::post('/event', [EventController::class, 'store'])->name('event.store');
+    Route::post('/event', [EventController::class, 'edit'])->name('event.store');
+
+    // Event Routes
+    Route::get('/events/create', [EventController::class, 'create'])->name('event.create'); // Use /create for the create form
+    Route::post('/event', [EventController::class, 'store'])->name('event.store'); // Changed from edit to store for the event creation
+    Route::get('/events/list', [EventController::class, 'list'])->name('event.list'); // Listing events
+    Route::get('/events', [EventController::class, 'index'])->name('event.index'); // Index page for events
+    Route::get('/events/edit/{id}', [EventController::class, 'edit'])->name('event.edit'); // Edit form
+    Route::put('/events/{id}', [EventController::class, 'update'])->name('event.update'); // Update event
+    Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('event.delete'); // Delete event
 
     Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');

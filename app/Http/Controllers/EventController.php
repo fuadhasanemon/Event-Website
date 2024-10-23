@@ -20,6 +20,14 @@ class EventController extends Controller
         return view('welcome', compact('featuredEvents'));
     }
 
+    public function list()
+    {
+
+        $events = Event::all();
+        // Pass them to the welcome view
+        return view('event.event-list', compact('events'));
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -87,7 +95,12 @@ class EventController extends Controller
      */
     public function edit(string $id)
     {
-        //
+          // Find the event by its ID
+        $event = Event::findOrFail($id);
+        $categories = Category::all();
+
+        // Pass the event to the edit view
+        return view('event.edit', compact('event', 'categories'));
     }
 
     /**
@@ -95,14 +108,61 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        // dd($request->all());
+
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+            'description' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category_id' => 'required|exists:categories,id',
+            'is_featured' => 'nullable|boolean',
+            'is_enabled' => 'nullable|boolean',
+        ]);
+
+        // Find the event by its ID
+        $event = Event::findOrFail($id);
+
+        // Update the event data with validated data
+        $event->fill([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'description' => $validated['description'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'category' => $validated['category_id'], // Ensure you're using 'category_id'
+            'is_featured' => $request->has('is_featured') ? 1 : 0,
+            'is_enabled' => $request->has('is_enabled') ? 1 : 0,
+        ]);
+
+        // Handle image upload if a new image is provided
+        if ($request->hasFile('image')) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $event->image = $imageName;
+        }
+
+        // Save the updated event data
+        $event->save();
+
+        return redirect()->route('event.list')->with('success', 'Event updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, $id)
     {
-        //
+        // Find the event by its ID
+        $event = Event::findOrFail($id);
+        
+        // Delete the event
+        $event->delete();
+
+        return redirect()->route('event.index')->with('success', 'Event deleted successfully.');
     }
 }
