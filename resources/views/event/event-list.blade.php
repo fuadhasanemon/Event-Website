@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     
                 <div class="container">
-                <h1>All Events</h1>
+                <h1 class="mb-4">All Events</h1>
 
                 <a href="{{ route('event.create') }}" class="btn btn-primary mb-3">Create New Event</a>
 

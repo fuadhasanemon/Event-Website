@@ -46,26 +46,26 @@
                     <!-- Event Category -->
                     <div class="mb-3">
                         <label for="category" class="form-label">Event Category</label>
-                        <select name="category_id" id="category" class="form-select" required>
+                        <select name="category" id="category" class="form-select" required>
                             <option value="" disabled>Select Category</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $event->category_id) == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" {{ old('category', $event->category_id) == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
 
-                    <!-- Enable/Disable Event -->
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" name="is_enabled" class="form-check-input" id="is_enabled" {{ old('is_enabled', $event->is_enabled) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="is_enabled">Enable Event</label>
-                    </div>
-
                     <!-- Mark as Featured -->
                     <div class="mb-3 form-check">
                         <input type="checkbox" name="is_featured" class="form-check-input" id="is_featured" {{ old('is_featured', $event->is_featured) ? 'checked' : '' }}>
                         <label class="form-check-label" for="is_featured">Mark as Featured</label>
+                    </div>
+
+                    <!-- Enable/Disable Event -->
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="is_enabled" class="form-check-input" id="is_enabled" {{ old('is_enabled', $event->is_enabled) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="is_enabled">Enable Event</label>
                     </div>
 
                     <!-- Submit Button -->

@@ -44,7 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/list', [EventController::class, 'list'])->name('event.list'); // Listing events
     Route::get('/events', [EventController::class, 'index'])->name('event.index'); // Index page for events
     Route::get('/events/edit/{id}', [EventController::class, 'edit'])->name('event.edit'); // Edit form
-    Route::put('/events/{id}', [EventController::class, 'update'])->name('event.update'); // Update event
+    Route::put('/events/update/{id}', [EventController::class, 'update'])->name('event.update'); // Update event
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('event.delete'); // Delete event
 
     Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
