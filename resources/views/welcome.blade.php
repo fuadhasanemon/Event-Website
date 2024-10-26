@@ -42,10 +42,28 @@
                         @endif
                     @endauth
                 </div>
+
+                
             @endif
+
+          
 
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
 
+           
+            <!-- <form action="{{ route('event.search') }}" method="GET" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="query" class="form-control" placeholder="Search events..." required>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </form> -->
+
+            <form action="{{ route('event.search') }}" method="GET" class="form-inline mb-4 d-flex">
+                    <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search events..." aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+            
             <h1 class="heading-1 mb-5 text-center">Featured event slider</h1>
                 
             <div class="slider row">
@@ -64,6 +82,8 @@
                 
             </div>
         </div>
+
+        
 
                <!-- Bootstrap JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -48,6 +48,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/events/{id}', [EventController::class, 'destroy'])->name('event.delete'); // Delete event
     Route::get('/event/{id}', [EventController::class, 'show'])->name('event.show');
 
+    Route::get('/events/search', [EventController::class, 'search'])->name('event.search');
+
+
     Route::get('/category/create', [CategoryController::class, 'create'])->name('category.create');
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
     Route::post('/categories', [CategoryController::class, 'store'])->name('category.store');

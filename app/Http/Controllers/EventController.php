@@ -177,4 +177,18 @@ class EventController extends Controller
 
         return redirect()->route('event.delete')->with('success', 'Event deleted successfully.');
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        // Fetch events matching the search query
+        $events = Event::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->get();
+    
+        // Return the search results view with the events
+        return view('event.search_results', compact('events', 'query'));
+    }
+
 }
