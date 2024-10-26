@@ -45,42 +45,30 @@
             @endif
 
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
+            <div class="container">
+                @if($event->image)
+                    <img class="mb-3" src="{{ asset('images/' . $event->image) }}" alt="{{ $event->name }}" class="img-fluid">
+                @endif
+                <h1 class="mb-3 heading-1">{{ $event->name }}</h1>
+                <p><strong>Description:</strong> {{ $event->description }}</p>
+                <p><strong>Start Date:</strong> {{ $event->start_date }}</p>
+                <p class="mb-3"><strong>End Date:</strong> {{ $event->end_date }}</p>
+                <!-- <p><strong>Category:</strong> {{ $event->category }}</p> -->
+                <!-- <p><strong>Status:</strong> {{ $event->is_enabled ? 'Enabled' : 'Disabled' }}</p>
+                <p><strong>Featured:</strong> {{ $event->is_featured ? 'Yes' : 'No' }}</p> -->
 
-            <h1 class="heading-1 mb-5 text-center">Featured event slider</h1>
                 
-            <div class="slider row">
-                @foreach($featuredEvents as $event)
-                    <div class="slide col-md-6 mx-3">
-                        <img class="w-100" src="{{ asset('images/' . $event->image) }}" alt="{{ $event->name }}">
-                        <div class="slide-caption mt-3">
-                            <a href="{{ route('event.show', $event->id) }}" class="heading-1 mb-3">{{ $event->name }}</a>
-                            <p class="mb-3">{{ $event->description }}</p>
-                            <p class="mb-3">{{ $event->start_date }} to {{ $event->end_date }}</p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
 
+                <a href="{{ route('home') }}" class="btn btn-primary">Back to Events</a>
+            </div>
+            
                 
             </div>
         </div>
 
                <!-- Bootstrap JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-        <script>
-            $(document).ready(function(){
-                $('.slider').slick({
-                    dots: true,
-                    infinite: true,
-                    speed: 500,
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    autoplay: true,
-                    autoplaySpeed: 3000,
-                });
-            });
-        </script>
+        
+    
     </body>
 </html>
