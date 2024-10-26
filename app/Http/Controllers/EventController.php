@@ -108,40 +108,51 @@ class EventController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         // dd($request->all());
-        // Validate the incoming request data
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category' => 'required|exists:categories,id',
-            'is_featured' => 'nullable|boolean',
-            'is_enabled' => 'nullable|boolean',
+        // Normalize checkbox values to boolean
+        $request->merge([
+            'is_featured' => $request->has('is_featured') ? true : false,
+            'is_enabled' => $request->has('is_enabled') ? true : false,
         ]);
 
-        dd($validated);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'category' => 'required|exists:categories,id',
+                'is_featured' => 'boolean',
+                'is_enabled' => 'boolean',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors());
+        }
+
+        // dd($validated);
 
         // Find the event by its ID
         $event = Event::findOrFail($id);
 
         // Handle file upload if a new image is provided
         if ($request->hasFile('image')) {
-            $imageName = time() . '.' . $request->image->extension(); // Create a unique filename
-            $request->image->move(public_path('images'), $imageName); // Save the image to public/images folder
-            $event->image = $imageName; // Update the image path in the event
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $validated['image'] = $imageName; // Use new image
+        } else {
+            $validated['image'] = $event->image; // Retain existing image
         }
 
         // Update the event with validated data
         $event->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'category' => $request->category, // Make sure you're using 'category_id'
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+            'description' => $validated['description'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'image' => $validated['image'], // Use updated or existing image
+            'category' => $validated['category'],
             'is_featured' => $request->has('is_featured') ? 1 : 0,
             'is_enabled' => $request->has('is_enabled') ? 1 : 0,
         ]);
